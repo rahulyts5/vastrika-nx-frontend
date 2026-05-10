@@ -12,6 +12,7 @@
       <form @submit.prevent="saveProduct" class="space-y-3 grid grid-cols-1 md:grid-cols-2 gap-3">
         <input v-model="form.name" placeholder="Product Name" class="border p-2 rounded" required />
         <input v-model="form.sku" placeholder="SKU" class="border p-2 rounded" required />
+        <input v-model="form.images" placeholder="Image URL" class="border p-2 rounded" />
         <select v-model.number="form.category_id" class="border p-2 rounded" required>
           <option value="">Select Category</option>
           <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -32,6 +33,7 @@
       <table class="w-full">
         <thead class="bg-maroon text-white">
           <tr>
+            <th class="p-3 text-left">Image</th>
             <th class="p-3 text-left">Name</th>
             <th class="p-3 text-left">SKU</th>
             <th class="p-3 text-left">Price</th>
@@ -41,6 +43,12 @@
         </thead>
         <tbody>
           <tr v-for="product in products" :key="product.id" class="border-b hover:bg-beige">
+            <td class="p-3">
+              <div class="w-16 h-16 bg-gray-100 rounded overflow-hidden flex items-center justify-center">
+                <img v-if="product.image" :src="product.image" alt="img" class="w-full h-full object-cover" />
+                <span v-else class="text-sm text-gray-500">No image</span>
+              </div>
+            </td>
             <td class="p-3">{{ product.name }}</td>
             <td class="p-3">{{ product.sku }}</td>
             <td class="p-3">₹{{ product.price }}</td>
@@ -73,6 +81,7 @@ const editingId = ref(null)
 const form = ref({
   name: '',
   sku: '',
+  images: '',
   category_id: '',
   price: 0,
   discount_price: 0,
@@ -114,6 +123,7 @@ const saveProduct = async () => {
     form.value = {
       name: '',
       sku: '',
+      images: '',
       category_id: '',
       price: 0,
       discount_price: 0,
